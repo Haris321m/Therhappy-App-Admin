@@ -1,0 +1,6 @@
+.main {
+    background: linear-gradient(to right, #FFE4C7, #FFE0DA, #FFEDE8, #FFEEDD);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.151);
+    overflow: scroll;
+    overflow-x: hidden;
+}
