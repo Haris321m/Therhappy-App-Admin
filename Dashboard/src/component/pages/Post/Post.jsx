@@ -15,7 +15,7 @@ function Post() {
 
     const fetchPosts = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/post');
+            const response = await axios.get('http://api.therhappy.site/api/post');
             setPosts(response.data);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to fetch posts');
@@ -32,7 +32,7 @@ function Post() {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/post', formData, {
+            const response = await axios.post('http://api.therhappy.site/api/post', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -46,7 +46,7 @@ function Post() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/api/post/${id}`);
+            await axios.delete(`http://api.therhappy.site/api/post/${id}`);
             setPosts(posts.filter(post => post._id !== id));
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to delete post');

@@ -15,7 +15,7 @@ function Educational() {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/article');
+      const response = await axios.get('http://api.therhappy.site/api/article');
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -34,13 +34,13 @@ function Educational() {
 
     try {
       if (selectedPost) {
-        await axios.put(`http://localhost:5000/api/article/${selectedPost._id}`, formData, {
+        await axios.put(`http://api.therhappy.site/api/article/${selectedPost._id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
       } else {
-        await axios.post('http://localhost:5000/api/article', formData, {
+        await axios.post('http://api.therhappy.site/api/article', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -55,7 +55,7 @@ function Educational() {
 
   const handleDeletePost = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/article/${id}`);
+      await axios.delete(`http://api.therhappy.site/api/api/article/${id}`);
       fetchPosts();
     } catch (error) {
       console.log(error);

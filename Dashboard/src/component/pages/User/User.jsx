@@ -12,7 +12,7 @@ function User() {
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/users');
+            const response = await axios.get('http://api.therhappy.site/api/users');
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -21,7 +21,7 @@ function User() {
 
     const deleteUser = async (userId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/users/${userId}`);
+            await axios.delete(`http://api.therhappy.site/api/users/${userId}`);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting user:', error);

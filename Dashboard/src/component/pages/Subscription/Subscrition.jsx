@@ -13,7 +13,7 @@ function Subscription() {
 
     async function fetchSubscriptions() {
         try {
-            const response = await axios.get('http://localhost:5000/api/subscription');
+            const response = await axios.get('http://api.therhappy.site/api/subscription');
             setSubscriptions(response.data);
         } catch (error) {
             console.error(error.message);
@@ -31,7 +31,7 @@ function Subscription() {
     async function createSubscription(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/subscription/sub', { price, time });
+            const response = await axios.post('http://api.therhappy.site/api/subscription/sub', { price, time });
             setSubscriptions([...subscriptions, response.data]); // Add new subscription to the list
             setPrice('');
             setTime('');
@@ -42,7 +42,7 @@ function Subscription() {
 
     async function deleteSubscription(id) {
         try {
-            await axios.get(`http://localhost:5000/api/subscription/delete/${id}`);
+            await axios.get(`http://api.therhappy.site/api/subscription/delete/${id}`);
             setSubscriptions(subscriptions.filter(subscription => subscription._id !== id));
         } catch (error) {
             console.error(error.message);

@@ -13,7 +13,7 @@ function MCQs() {
 
     async function fetchQuestions() {
         try {
-            const response = await axios.get('http://localhost:5000/api/questions/questions');
+            const response = await axios.get('http://api.therhappy.site/api/questions/questions');
             setQuestions(response.data);
         } catch (error) {
             console.error(error.message);
@@ -22,7 +22,7 @@ function MCQs() {
 
     async function handleDeleteQuestion(id) {
         try {
-            await axios.delete(`http://localhost:5000/api/questions/questions/${id}`);
+            await axios.delete(`http://api.therhappy.site/api/questions/questions/${id}`);
             setQuestions(questions.filter(question => question._id !== id));
         } catch (error) {
             console.error(error.message);
@@ -32,7 +32,7 @@ function MCQs() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/questions/questions', {
+            const response = await axios.post('http://api.therhappy.site/api/questions/questions', {
                 question: newQuestion,
                 answers: options.map((option, index) => ({
                     text: option,
