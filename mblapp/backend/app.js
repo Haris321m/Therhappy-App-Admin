@@ -8,6 +8,7 @@ import questionRoutes from './routes/quiz.route.js';
 import journalEntryRoutes from './routes/journal.route.js';
 import moodRoutes from './routes/mode.route.js';
 import post from './routes/post.route.js';
+import Audio from './routes/audio.route.js';
 import cors from 'cors';
 import path from 'path';
 import subscriptionroute from "./routes/subscription.route.js";
@@ -38,12 +39,15 @@ app.use('/api/questions', questionRoutes);
 app.use('/api/journal-entries', journalEntryRoutes);
 app.use('/api/moods', moodRoutes);
 app.use('/api/post', post);
-app.use('/api/subscription', subscriptionroute); // Fixed this line
+app.use('/api/subscription', subscriptionroute);
 app.use('/api/article',Article);
+app.use('/api/audio',Audio);
 
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000, // Increase timeout to 5 seconds
+    socketTimeoutMS: 45000,
 }).then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => {

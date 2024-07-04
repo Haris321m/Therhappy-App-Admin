@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";// Assuming you are using react-router-dom for navigation
 
@@ -7,11 +7,13 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigation=useNavigate();
-
+  const API=import.meta.env.VITE_API_URL;
+   
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
+
+      const response = await axios.post(`${API}/users/login`, { email, password });
       const { token, user } = response.data;
 
       // Save token and user in local storage

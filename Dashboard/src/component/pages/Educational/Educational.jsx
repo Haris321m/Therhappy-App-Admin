@@ -8,14 +8,15 @@ function Educational() {
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
-
+  const API=import.meta.env.VITE_API_URL;
   useEffect(() => {
+    
     fetchPosts();
   }, []);
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://api.therhappy.site/api/article');
+      const response = await axios.get(`${API}/article`);
       setPosts(response.data);
     } catch (error) {
       console.log(error);
@@ -34,13 +35,13 @@ function Educational() {
 
     try {
       if (selectedPost) {
-        await axios.put(`http://api.therhappy.site/api/article/${selectedPost._id}`, formData, {
+        await axios.put(`${API}/article/${selectedPost._id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
       } else {
-        await axios.post('http://api.therhappy.site/api/article', formData, {
+        await axios.post(`${API}/article`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -55,7 +56,7 @@ function Educational() {
 
   const handleDeletePost = async (id) => {
     try {
-      await axios.delete(`http://api.therhappy.site/api/api/article/${id}`);
+      await axios.delete(`${API}/api/article/${id}`);
       fetchPosts();
     } catch (error) {
       console.log(error);
@@ -65,7 +66,7 @@ function Educational() {
   const handleEditPost = (post) => {
     setTitle(post.title);
     setContent(post.content);
-    setImage(null);  // Reset image as we can't edit the file input directly
+    setImage(null);  
     setSelectedPost(post);
   };
 

@@ -8,14 +8,15 @@ function Post() {
     const [image, setImage] = useState(null);
     const [posts, setPosts] = useState([]);
     const [error, setError] = useState(null);
-
+    const API=import.meta.env.VITE_API_URL;
     useEffect(() => {
+        
         fetchPosts();
     }, []);
 
     const fetchPosts = async () => {
         try {
-            const response = await axios.get('http://api.therhappy.site/api/post');
+            const response = await axios.get(`${API}/post`);
             setPosts(response.data);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to fetch posts');
@@ -32,7 +33,7 @@ function Post() {
         }
 
         try {
-            const response = await axios.post('http://api.therhappy.site/api/post', formData, {
+            const response = await axios.post(`${API}/post`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -46,7 +47,7 @@ function Post() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://api.therhappy.site/api/post/${id}`);
+            await axios.delete(`${API}/post/${id}`);
             setPosts(posts.filter(post => post._id !== id));
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to delete post');

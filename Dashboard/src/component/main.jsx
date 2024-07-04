@@ -6,6 +6,7 @@ import Post from './pages/Post/Post';
 import Quize from './pages/Quize/Quize';
 import YogaPoses from './pages/YogaPoses/YogaPoses';
 import Educational from './pages/Educational/Educational';
+import Audio from './pages/audio/audio';
 
 function Main() {
   const [activeComponent, setActiveComponent] = useState('User'); // Default to User component
@@ -28,6 +29,8 @@ function Main() {
         return <YogaPoses />;
       case 'Educational':
         return <Educational />;
+      case  'audio':
+         return <Audio />
       default:
         return null;
     }
@@ -72,6 +75,12 @@ function Main() {
             onClick={() => handleItemClick('Educational')}
           >
             Educational
+          </li>
+          <li
+            className={`mt-10 text-3xl p-5 hover:cursor-pointer hover:bg-white hover:text-black ${activeComponent === 'Educational' ? 'bg-white text-black' : ''}`}
+            onClick={() => handleItemClick('audio')}
+          >
+            Audio
           </li>
         </ul>
       </div>

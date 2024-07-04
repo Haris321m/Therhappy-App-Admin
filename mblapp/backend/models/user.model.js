@@ -36,8 +36,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     issues: {
-        type: [String],
-        required: true
+        type: [String]
     },
     subscriptionStart: {
         type: Date,
@@ -47,8 +46,7 @@ const userSchema = new mongoose.Schema({
         type: Date
     },
     subscriptionDays: {
-        type: Number,  // Number of days based on Subscription model
-        required: true
+        type: Number,  
     }
 }, { timestamps: true });
 

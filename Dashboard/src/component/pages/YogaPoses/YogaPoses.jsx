@@ -8,14 +8,14 @@ function YogaPoses() {
     const [video, setVideo] = useState(null);
     const [error, setError] = useState(null);
     const [selectedPose, setSelectedPose] = useState(null);
-
+    const API=import.meta.env.VITE_API_URL;
     useEffect(() => {
         fetchPoses();
     }, []);
 
     async function fetchPoses() {
         try {
-            const response = await axios.get('http://api.therhappy.site/api/yoga-poses/');
+            const response = await axios.get(`${API}/yoga-poses/`);
             setPoses(response.data);
         } catch (error) {
             console.error(error.message);
@@ -33,14 +33,14 @@ function YogaPoses() {
         try {
             let response;
             if (selectedPose) {
-                response = await axios.put(`http://api.therhappy.site/api/yoga-poses/${selectedPose._id}`, formData, {
+                response = await axios.put(`${API}/yoga-poses/${selectedPose._id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
                 setPoses(poses.map(pose => pose._id === selectedPose._id ? response.data : pose));
             } else {
-                response = await axios.post('http://api.therhappy.site/api/yoga-poses', formData, {
+                response = await axios.post(`${API}/yoga-poses`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -62,7 +62,7 @@ function YogaPoses() {
 
     async function handleDeletePose(id) {
         try {
-            await axios.delete(`http://api.therhappy.site/api/yoga-poses/${id}`);
+            await axios.delete(`${API}/yoga-poses/${id}`);
             setPoses(poses.filter(pose => pose._id !== id));
         } catch (error) {
             console.error(error.message);

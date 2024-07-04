@@ -8,18 +8,16 @@ import {v2 as cloudinary} from "cloudinary";
 
 export const createUser = async (req, res) => {
     try {
-    
-
+        console.log(req.body);
         const { name, age, gender, relationshipstatus, email, number, password, issues, googleId } = req.body;
-        
+
         let existingUser = await User.findOne({ email });
 
         if (existingUser) {
             return res.status(400).json({ message: 'User with this email already exists' });
         }
-    
+
         const hashedPassword = await bcrypt.hash(password, 12);
-        
 
         const newUser = new User({
             name,
@@ -32,23 +30,20 @@ export const createUser = async (req, res) => {
             issues
         });
 
-       
-
         const savedUser = await newUser.save();
 
         const token = jwt.sign(
             { userId: savedUser._id, email: savedUser.email },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '24h' }
         );
 
         res.status(201).json({ token, user: savedUser });
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'An error occurred while creating the user' });
     }
 };
-
 
 
 export const getUsers = async (req, res) => {
@@ -115,6 +110,7 @@ export const deleteUser = async (req, res) => {
 
 
 export const login = async (req, res) => {
+    console.log(req.body);
     const { email, password } = req.body;
 
     try {
@@ -126,7 +122,7 @@ export const login = async (req, res) => {
         }
 
         
-        const isPasswordMatch = await bcrypt.compare(password, user.Password);
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
 
         if (!isPasswordMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
@@ -177,3 +173,4 @@ export const updateSubscription = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+

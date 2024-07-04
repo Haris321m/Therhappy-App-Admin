@@ -7,8 +7,8 @@ const commentSchema = new mongoose.Schema({
         required: true
     },
     newlike: {
-        type: Boolean,  // Use Boolean type for boolean values
-        default: false  // Set a default value if needed
+        type: Boolean,  
+        default: false  
     },
     dislikes: {
         type: Boolean,

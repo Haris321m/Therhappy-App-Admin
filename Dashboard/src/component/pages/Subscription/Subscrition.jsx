@@ -6,14 +6,14 @@ function Subscription() {
     const [subscriptions, setSubscriptions] = useState([]);
     const [price, setPrice] = useState('');
     const [time, setTime] = useState('');
-
+    const API=import.meta.env.VITE_API_URL;
     useEffect(() => {
         fetchSubscriptions();
     }, []);
 
     async function fetchSubscriptions() {
         try {
-            const response = await axios.get('http://api.therhappy.site/api/subscription');
+            const response = await axios.get(`${API}/subscription`);
             setSubscriptions(response.data);
         } catch (error) {
             console.error(error.message);
@@ -31,7 +31,7 @@ function Subscription() {
     async function createSubscription(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://api.therhappy.site/api/subscription/sub', { price, time });
+            const response = await axios.post(`${API}/subscription/sub`, { price, time });
             setSubscriptions([...subscriptions, response.data]); // Add new subscription to the list
             setPrice('');
             setTime('');
@@ -42,7 +42,7 @@ function Subscription() {
 
     async function deleteSubscription(id) {
         try {
-            await axios.get(`http://api.therhappy.site/api/subscription/delete/${id}`);
+            await axios.get(`${API}/subscription/delete/${id}`);
             setSubscriptions(subscriptions.filter(subscription => subscription._id !== id));
         } catch (error) {
             console.error(error.message);

@@ -6,14 +6,15 @@ function MCQs() {
     const [newQuestion, setNewQuestion] = useState('');
     const [options, setOptions] = useState(['', '', '', '']);
     const [correctOption, setCorrectOption] = useState('');
-
+    const API=import.meta.env.VITE_API_URL;
     useEffect(() => {
+        
         fetchQuestions();
     }, []);
 
     async function fetchQuestions() {
         try {
-            const response = await axios.get('http://api.therhappy.site/api/questions/questions');
+            const response = await axios.get(`${API}/questions/questions`);
             setQuestions(response.data);
         } catch (error) {
             console.error(error.message);
@@ -22,7 +23,7 @@ function MCQs() {
 
     async function handleDeleteQuestion(id) {
         try {
-            await axios.delete(`http://api.therhappy.site/api/questions/questions/${id}`);
+            await axios.delete(`${API}/questions/questions/${id}`);
             setQuestions(questions.filter(question => question._id !== id));
         } catch (error) {
             console.error(error.message);
@@ -32,7 +33,7 @@ function MCQs() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://api.therhappy.site/api/questions/questions', {
+            const response = await axios.post(`${API}/questions/questions`, {
                 question: newQuestion,
                 answers: options.map((option, index) => ({
                     text: option,

@@ -7,7 +7,7 @@ import passport from 'passport';
 
 const router = express.Router();
 
-router.post('/signup',upload.single("img"),createUser);
+router.post('/signup',createUser);
 router.post('/login', login);
 router.get('/auth/google' , passport.authenticate('google', { scope: 
 	[ 'email', 'profile' ] 

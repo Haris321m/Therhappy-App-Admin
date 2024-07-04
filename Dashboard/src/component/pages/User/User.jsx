@@ -5,14 +5,14 @@ import UserCards from './UserCards';
 function User() {
     const [users, setUsers] = useState([]);
     const [search, setSearch] = useState('');
-
+    const API=import.meta.env.VITE_API_URL;
     useEffect(() => {
         fetchUsers();
     }, []);
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get('http://api.therhappy.site/api/users');
+            const response = await axios.get(`${API}/users`);
             setUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
@@ -21,7 +21,7 @@ function User() {
 
     const deleteUser = async (userId) => {
         try {
-            await axios.delete(`http://api.therhappy.site/api/users/${userId}`);
+            await axios.delete(`${API}/users/${userId}`);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting user:', error);
