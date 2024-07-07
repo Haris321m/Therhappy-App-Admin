@@ -13,7 +13,7 @@ function Subscription() {
 
     async function fetchSubscriptions() {
         try {
-            const response = await axios.get(`${API}/subscription`);
+            const response = await axios.get(`http://localhost:5000/api/subscription`);
             setSubscriptions(response.data);
         } catch (error) {
             console.error(error.message);

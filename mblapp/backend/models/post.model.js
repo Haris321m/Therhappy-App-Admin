@@ -1,25 +1,37 @@
 import mongoose from 'mongoose';
-import { boolean, string } from 'zod';
+
+const replySchema = new mongoose.Schema({
+    text: {
+        type: String,
+        required: true
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
 
 const commentSchema = new mongoose.Schema({
     text: {
         type: String,
         required: true
     },
-    newlike: {
-        type: Boolean,  
-        default: false  
-    },
-    dislikes: {
-        type: Boolean,
-        default: false
-    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    replies: [replySchema],
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
-}, { timestamps: true });
+});
 
 const postSchema = new mongoose.Schema({
     title: {
@@ -30,15 +42,32 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    path:{
-        type:String
-    },
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true
     },
-    comments: [commentSchema] // Embed comments schema
-}, { timestamps: true });
+    path: {
+        type: String
+    },
+    comments: [commentSchema],
+    likes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    dislikes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
+});
 
 const Post = mongoose.model('Post', postSchema);
 

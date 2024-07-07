@@ -1,19 +1,16 @@
 import JournalEntry from '../models/journal.model.js';
 
-
 export const createJournalEntry = async (req, res) => {
     try {
         const { content, mood, user } = req.body;
 
         const newJournalEntry = new JournalEntry({ content, mood, user });
         const savedJournalEntry = await newJournalEntry.save();
-
         res.status(201).json(savedJournalEntry);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
-
 
 export const getJournalEntries = async (req, res) => {
     try {
@@ -24,10 +21,10 @@ export const getJournalEntries = async (req, res) => {
     }
 };
 
-
 export const getJournalEntryById = async (req, res) => {
     try {
         const { id } = req.params;
+        console.log(id);
         const journalEntry = await JournalEntry.findById(id).populate('mood').populate('user');
 
         if (!journalEntry) {
@@ -39,7 +36,6 @@ export const getJournalEntryById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
 
 export const updateJournalEntry = async (req, res) => {
     try {
@@ -61,7 +57,6 @@ export const updateJournalEntry = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
-
 
 export const deleteJournalEntry = async (req, res) => {
     try {

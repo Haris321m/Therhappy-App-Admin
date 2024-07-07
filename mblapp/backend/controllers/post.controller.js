@@ -117,7 +117,7 @@ export const addComment = async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        const comment = { text, user: userId,likes,dislikes };
+        const comment = { text, user: userId };
         post.comments.push(comment);
         await post.save();
 
@@ -152,3 +152,105 @@ export const deleteComment = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const likePost = async (req, res) => {
+    const { id } = req.params;
+    
+    const { userId } = req.body;
+  ;
+    try {
+        const post = await Post.findById(id);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+       
+        if (post.likes.includes(userId)) {
+           
+            post.likes = post.likes.filter((like) => like.toString() !== userId.toString());
+            await post.save();
+            return res.status(200).json({ message: 'Like removed', post });
+        } else {
+            
+            if (post.dislikes.includes(userId)) {
+                post.dislikes = post.dislikes.filter((dislike) => dislike.toString() !== userId.toString());
+            }
+
+          
+            post.likes.push(userId);
+            await post.save();
+            return res.status(200).json({ message: 'Post liked', post });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+export const dislikePost = async (req, res) => {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    try {
+        const post = await Post.findById(id);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+
+        if (post.likes.includes(userId)) {
+            post.likes = post.likes.filter((like) => like.toString() !== userId.toString());
+            await post.save();
+            return res.status(200).json({ message: 'Like removed', post });
+        } else {
+            if (post.dislikes.includes(userId)) {
+                post.dislikes = post.dislikes.filter((dislike) => dislike.toString() !== userId.toString());
+            }
+            post.likes.push(userId);
+            await post.save();
+            return res.status(200).json({ message: 'Post liked', post });
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ message: error.message});
+    }
+};
+
+export const addReply = async (req, res) => {
+    const { postId, commentId } = req.params;
+    const { text, userId } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        const comment = post.comments.id(commentId);
+
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+
+        const reply = { text, user: userId };
+        comment.replies.push(reply);
+        await post.save();
+
+        res.status(201).json(post);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+

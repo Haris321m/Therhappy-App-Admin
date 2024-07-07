@@ -15,7 +15,7 @@ function YogaPoses() {
 
     async function fetchPoses() {
         try {
-            const response = await axios.get(`${API}/yoga-poses/`);
+            const response = await axios.get(`http://localhost:5000/api/yoga-poses/`);
             setPoses(response.data);
         } catch (error) {
             console.error(error.message);
@@ -33,14 +33,14 @@ function YogaPoses() {
         try {
             let response;
             if (selectedPose) {
-                response = await axios.put(`${API}/yoga-poses/${selectedPose._id}`, formData, {
+                response = await axios.put(`http://localhost:5000/api/yoga-poses/${selectedPose._id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
                 setPoses(poses.map(pose => pose._id === selectedPose._id ? response.data : pose));
             } else {
-                response = await axios.post(`${API}/yoga-poses`, formData, {
+                response = await axios.post(`http://localhost:5000/api/yoga-poses`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
