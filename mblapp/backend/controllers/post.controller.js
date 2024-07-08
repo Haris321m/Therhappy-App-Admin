@@ -1,6 +1,7 @@
 import Post from '../models/post.model.js';
 import User from '../models/user.model.js';
 import {v2 as cloudinary} from "cloudinary";
+import mongoose from 'mongoose';
 
 export const createPost = async (req, res) => {
     try {
@@ -22,7 +23,7 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
     try {
-        const posts = await Post.find().populate('author', 'name email').populate({
+        const posts = await Post.find().populate('user', 'name email').populate({
             path: 'comments.user',
             select: 'name image'
         });
@@ -103,6 +104,8 @@ export const deletePost = async (req, res) => {
 export const addComment = async (req, res) => {
     const { postId } = req.params;
     const { text, userId } = req.body;
+     console.log(req.body);
+
 
     try {
         const user = await User.findById(userId);
@@ -155,9 +158,18 @@ export const deleteComment = async (req, res) => {
 
 export const likePost = async (req, res) => {
     const { id } = req.params;
-    
     const { userId } = req.body;
-  ;
+
+    console.log('User ID:', userId);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid post ID' });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
     try {
         const post = await Post.findById(id);
 
@@ -165,24 +177,27 @@ export const likePost = async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-       
+        post.likes = post.likes.filter((like) => like != null);
+        post.dislikes = post.dislikes.filter((dislike) => dislike != null);
+
         if (post.likes.includes(userId)) {
-           
+            console.log('User has already liked the post, removing like...');
             post.likes = post.likes.filter((like) => like.toString() !== userId.toString());
             await post.save();
             return res.status(200).json({ message: 'Like removed', post });
         } else {
-            
+            console.log('User has not liked the post, adding like...');
             if (post.dislikes.includes(userId)) {
+                console.log('User had disliked the post, removing dislike...');
                 post.dislikes = post.dislikes.filter((dislike) => dislike.toString() !== userId.toString());
             }
 
-          
             post.likes.push(userId);
             await post.save();
             return res.status(200).json({ message: 'Post liked', post });
         }
     } catch (error) {
+        console.error('Error processing like/dislike:', error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -192,6 +207,16 @@ export const dislikePost = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.body;
 
+    console.log('User ID:', userId);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid post ID' });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
     try {
         const post = await Post.findById(id);
 
@@ -199,25 +224,28 @@ export const dislikePost = async (req, res) => {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        if (!userId) {
-            return res.status(400).json({ message: 'User ID is required' });
-        }
+        post.likes = post.likes.filter((like) => like != null);
+        post.dislikes = post.dislikes.filter((dislike) => dislike != null);
 
-        if (post.likes.includes(userId)) {
-            post.likes = post.likes.filter((like) => like.toString() !== userId.toString());
+        if (post.dislikes.includes(userId)) {
+            console.log('User has already disliked the post, removing dislike...');
+            post.dislikes = post.dislikes.filter((dislike) => dislike.toString() !== userId.toString());
             await post.save();
-            return res.status(200).json({ message: 'Like removed', post });
+            return res.status(200).json({ message: 'Dislike removed', post });
         } else {
-            if (post.dislikes.includes(userId)) {
-                post.dislikes = post.dislikes.filter((dislike) => dislike.toString() !== userId.toString());
+            console.log('User has not disliked the post, adding dislike...');
+            if (post.likes.includes(userId)) {
+                console.log('User had liked the post, removing like...');
+                post.likes = post.likes.filter((like) => like.toString() !== userId.toString());
             }
-            post.likes.push(userId);
+
+            post.dislikes.push(userId);
             await post.save();
-            return res.status(200).json({ message: 'Post liked', post });
+            return res.status(200).json({ message: 'Post disliked', post });
         }
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ message: error.message});
+        console.error('Error processing like/dislike:', error);
+        res.status(500).json({ message: error.message });
     }
 };
 
