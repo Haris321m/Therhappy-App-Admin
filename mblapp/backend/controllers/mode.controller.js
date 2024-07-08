@@ -59,7 +59,23 @@ export const getMoodById = async (req, res) => {
             return res.status(404).json({ message: 'Mood entry not found' });
         }
 
-        res.status(200).json(mood);
+        const formattedMood = {
+            _id: mood._id,
+            mood: mood.mood,
+            comments: mood.comments,
+            user: mood.user,
+            createdAt: {
+                date: formatDate(mood.createdAt),
+                time: formatTime(mood.createdAt)
+            },
+            updatedAt: {
+                date: formatDate(mood.updatedAt),
+                time: formatTime(mood.updatedAt)
+            }
+            // Add any other fields you want to include in the response
+        };
+
+        res.status(200).json(formattedMood);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

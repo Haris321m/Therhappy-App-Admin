@@ -25,7 +25,7 @@ export const getJournalEntryById = async (req, res) => {
     try {
         const { id } = req.params;
         console.log(id);
-        const journalEntry = await JournalEntry.find({user:id}).populate('mood').populate('user');
+        const journalEntry = await JournalEntry.findById(id).populate('mood').populate('user');
 
         if (!journalEntry) {
             return res.status(404).json({ message: 'Journal entry not found' });
