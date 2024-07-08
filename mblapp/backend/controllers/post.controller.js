@@ -23,7 +23,7 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
     try {
-        const posts = await Post.find().populate('user', 'name email').populate({
+        const posts = await Post.find().populate({
             path: 'comments.user',
             select: 'name image'
         });
